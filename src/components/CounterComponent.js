@@ -1,35 +1,49 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux';
 
-export default class CounterComponent extends Component {
+class CounterComponent extends Component {
     constructor(props){
         super(props);
-
-        this.state = {
-            text: "Hello World",
-            number: 1
-        }
     }
     
     render() {
         return (
             <div>
-            {this.state.text}
+            {this.props.counter.customText}
             <div>
-                <input value={this.state.text} onChange={(e)=>{
+                <input onChange={(e)=>{
                     this.setState({
                         text: e.target.value
                     });
                 }} type="text" name="username"></input>
             </div>
             
-                Number is: {this.state.number}
+                Number is: {this.props.counter.number}
                 {" "}
                 <button onClick={(e)=>{
-                    this.setState({
-                        number: ++this.state.number
-                    });
+                    this.props.setNumber("This is a counter number 1 =====> ");
+                }} className="btn btn-info btn-sm">+</button>
+                <button onClick={(e)=>{
+                    this.props.setNumber("This is a counter number 2 =====> ");
                 }} className="btn btn-info btn-sm">+</button>
             </div>
         )
     }
 }
+
+const mapStateToProps = ({counter,profile})=>{
+    return {
+        counter,profile
+    }
+}
+
+const mapDispatchToProps = {
+    setNumber: (text)=>{
+        return {
+            type: "SET_NUMBER",
+            payload: text
+        }
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(CounterComponent);

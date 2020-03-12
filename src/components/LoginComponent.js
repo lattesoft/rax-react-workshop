@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
+import axios from 'axios';
+import {connect} from 'react-redux';
+import {setUser} from '../redux/actions/profileActions';
+import { withRouter } from 'react-router-dom';
 
-export default class LoginComponent extends Component {
+class LoginComponent extends Component {
     constructor(){
         super();
         this.state = {
@@ -17,8 +21,11 @@ export default class LoginComponent extends Component {
         });
     }
 
-    __onSubmit = ()=>{
-        console.log(this.state);
+    __onSubmit = async ()=>{
+        // console.log(this.state);
+        const res = await axios.get("https://reqres.in/api/users/1")
+        this.props.setUser(res.data.data);
+        this.props.history.push("/profile");
     }
 
     render() {
@@ -33,3 +40,8 @@ export default class LoginComponent extends Component {
         )
     }
 }
+
+
+export default connect(null,{setUser})(
+    withRouter(LoginComponent)
+);
